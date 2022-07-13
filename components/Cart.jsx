@@ -11,7 +11,7 @@ import getStripe from '../lib/getStripe'
 const Cart = () => {
 
   const cartRef = useRef()
-  const { totalPrice, totalQuantities, cartItems, setShowCart, toggleCartItemQuantity, onRemove } = useStateContext()
+  const { totalPrice, totalQuantities, cartItems, setShowCart, toggleCartItemQuantity, onRemoveItemFromCart } = useStateContext()
 
   const handleCheckout = async () => {
     const stripe = await getStripe()
@@ -40,15 +40,18 @@ const Cart = () => {
           <span className='heading'>Your Cart</span>
           <span className='cart-num-items'>({totalQuantities} items)</span>
         </button>
+
+
         {cartItems.length < 1 && (
           <div className='empty-cart'>
-            <AiOutlineShopping size={150} />
+            <AiOutlineShopping size={200} />
             <h3>Your Shopping bag is empty </h3>
             <Link href='/'>
               <button type='button' onClick={() => setShowCart(false)} className='btn'>Continue Shopping</button>
             </Link>
           </div>
         )}
+
 
         <div className='product-container'>
           {cartItems.length >= 1 && cartItems.map((item) => (
@@ -63,16 +66,18 @@ const Cart = () => {
                   <div>
                     <p className='quantity-desc'>
                       <span className='minus' onClick={() => toggleCartItemQuantity(item._id, 'dec')}><AiOutlineMinus /></span>
-                      <span className='num' onClick=''>{item.quantity}</span>
+                      <span className='num'>{item.quantity}</span>
                       <span className='plus' onClick={() => toggleCartItemQuantity(item._id, 'inc')}><AiOutlinePlus /></span>
                     </p>
                   </div>
-                  <button type='button' className='remove-item' onClick={() => onRemove(item)}><TiDeleteOutline /></button>
+                  <button type='button' className='remove-item' onClick={() => onRemoveItemFromCart(item)}><TiDeleteOutline /></button>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
+
         {cartItems.length >= 1 && (
           <div className='cart-bottom'>
             <div className='total'>
